@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+
+Project("{38B29040-91BC-A0DA-60E3-B5171B03EF05}") = "PinArrayModel", "PinArrayModel.csproj", "{E47C6C8A-5421-E670-9EED-CF9C79A82D72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E47C6C8A-5421-E670-9EED-CF9C79A82D72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E47C6C8A-5421-E670-9EED-CF9C79A82D72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E47C6C8A-5421-E670-9EED-CF9C79A82D72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E47C6C8A-5421-E670-9EED-CF9C79A82D72}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	
+EndGlobal
