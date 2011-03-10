@@ -13,7 +13,7 @@ public class PinArray : MonoBehaviour {
 	int gridX = 64;
 	int  gridY = 48;
 	float spacing = 4.5f;
-    int[,] depthmap = new int[48, 64];
+    float[,] depthmap = new float[48, 64];
     int[,] colormap = new int[48, 64];
     Transform[,] pins = new Transform[480, 640];
     int fileCount = 0;
@@ -97,6 +97,35 @@ public class PinArray : MonoBehaviour {
         }
     }
 
+    void LoadArray(string source, float[,] dest)
+    {
+        if (fileCount < 240)
+            fileCount++;
+        else
+            fileCount = 0;
+
+        string fileName = "\\Depth\\" + source + fileCount + ".csv";
+        StreamReader sr = new StreamReader(File.OpenRead(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + fileName));
+        string file = sr.ReadToEnd();
+        string[] rows = file.Split('\n');
+        for (int y = 0; y < 64; y++)
+        {
+            string[] columns = rows[y].Split(',');
+            for (int x = 0; x < 48; x++)
+            {
+                float number = 0;
+                bool result = Single.TryParse(columns[x], out number);
+
+                if (result)
+                    dest[x, y] = number;
+                else
+                    dest[x, y] = 0;
+            }
+        }
+        sr.Close();
+    }
+
+
     void LoadArray(string source, int [,] dest)
     {
         if (fileCount < 240)
@@ -156,7 +185,7 @@ public class PinArray : MonoBehaviour {
                 float height = t.position.y;
                 //UnityEngine.Debug.Log(height +":"+ h);
                 
-                t.position = new Vector3(t.position.x,  h, t.position.z);
+                t.position = new Vector3(t.position.x,  -h * 24, t.position.z);
 
                 byte[] bytes = BitConverter.GetBytes(colormap[y,x]);
                 Color color = new Color(bytes[2]/256F,bytes[1]/256F,bytes[0]/256F,bytes[3]/256F);
