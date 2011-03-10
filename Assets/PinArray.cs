@@ -10,12 +10,18 @@ using UnityEngine;
 public class PinArray : MonoBehaviour {
 
     public Transform PinPrefab;
-	int gridX = 64;
-	int  gridY = 48;
+    const int pinScale = 20;
+    const int dataScale = 2;
+	const int gridX = 640/pinScale;
+	const int  gridY = 480/pinScale;
 	float spacing = 4.5f;
+
+    // these come from my c# kinact app so they are constant
     float[,] depthmap = new float[48, 64];
     int[,] colormap = new int[48, 64];
-    Transform[,] pins = new Transform[480, 640];
+
+    // this holds all of my pins
+    Transform[,] pins = new Transform[gridX, gridY];
     int fileCount = 0;
 
     Thread thread;
@@ -38,7 +44,7 @@ public class PinArray : MonoBehaviour {
             for (int y = 0; y < gridY; y++)
             {
                 //float h = (float)depthmap[y*10, x*10]/depthScale;
-                Transform t = (Transform) Instantiate(PinPrefab, new Vector3(x * spacing, 0, y * spacing), Quaternion.identity);
+                Transform t = (Transform) Instantiate(PinPrefab, new Vector3((x * spacing) - (gridX*spacing/2), 0, (y * spacing) - (gridY*spacing/2)), Quaternion.identity);
                 pins[x, y] = t;
             }
 		}
@@ -66,7 +72,7 @@ public class PinArray : MonoBehaviour {
     {
         while (true)
         {
-            //Thread.Sleep(250);
+            Thread.Sleep(50);
 
             // wait until it's safe to work with gameobjects
             mainLoop.WaitOne();
@@ -180,14 +186,17 @@ public class PinArray : MonoBehaviour {
         {
             for (int y = 0; y < gridY; y++)
             {
-                float h = depthmap[y, x];
+                float h = depthmap[y * dataScale, x * dataScale];
                 Transform t = (Transform)pins[x,y];
                 float height = t.position.y;
                 //UnityEngine.Debug.Log(height +":"+ h);
                 
-                t.position = new Vector3(t.position.x,  -h * 24, t.position.z);
+                if (h == 0)
+                    t.position = new Vector3(t.position.x, -24, t.position.z);
+                else
+                    t.position = new Vector3(t.position.x, -h * 24, t.position.z);
 
-                byte[] bytes = BitConverter.GetBytes(colormap[y,x]);
+                byte[] bytes = BitConverter.GetBytes(colormap[y * dataScale, x * dataScale]);
                 Color color = new Color(bytes[2]/256F,bytes[1]/256F,bytes[0]/256F,bytes[3]/256F);
                 t.Find("Head").renderer.material.color = color;
                 //UnityEngine.Debug.Log(bytes +":" + color);
